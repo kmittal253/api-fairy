@@ -24,6 +24,7 @@ from werkzeug.http import HTTP_STATUS_CODES
 
 from apifairy.decorators import _webhooks
 from apifairy.exceptions import ValidationError
+from apifairy.utils import sort_parameters_by_name
 from apifairy import fields as apifairy_fields
 
 
@@ -59,7 +60,8 @@ class APIFairy:
 
         if self.apispec_path:
             def json():
-                return dumps(self.apispec), 200, \
+                parsed_apispec = sort_parameters_by_name(self.apispec)
+                return dumps(parsed_apispec), 200, \
                     {'Content-Type': 'application/json'}
 
             for decorator in self.apispec_decorators:
